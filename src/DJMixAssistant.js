@@ -9,9 +9,9 @@ const [selectedPair, setSelectedPair] = useState(null);
 
 // select a track by searching (just take top 1 for now)
 const findTrack = (searchString) => {
-  // TODO: move these to .env file first, then some secrets store (aws?) later
-  const client_id = 'bc6b8939597c4046ac84ea9606c8c258';
-  const client_secret = '4d994ea3b313437392af698a51bd4482';
+  // TODO: move secrets store (aws?)
+  const client_id = process.env.spotify_client_id;
+  const client_secret = process.env.spotify_client_secret;
   
   async function getAccessToken() {
   const response = await fetch('https://accounts.spotify.com/api/token', {
@@ -37,7 +37,7 @@ const findTrack = (searchString) => {
   console.log(data.tracks.items);
   }
   
-  searchTracks('Imagine Dragons');
+  searchTracks(searchString);
 };
 
 // Simulated track analysis - in production, this would call Spotify API
@@ -63,7 +63,7 @@ return {
 };
 
 const addTrack = () => {
-  findTrack('Imagine Dragons');
+  findTrack('');
   if (!spotifyUrl) return;
   
   setAnalyzing(true);
