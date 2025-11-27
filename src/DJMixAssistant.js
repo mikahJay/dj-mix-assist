@@ -8,37 +8,38 @@ const [analyzing, setAnalyzing] = useState(false);
 const [selectedPair, setSelectedPair] = useState(null);
 
 // select a track by searching (just take top 1 for now)
-const findTrack = (searchString) => {
-  // TODO: move secrets somewhere else so they're not available to browser
-  const client_id = process.env.REACT_APP_SPOTIFY_CLIENT_ID;
-  const client_secret = process.env.REACT_APP_SPOTIFY_CLIENT_SECRET;
-  
-  async function getAccessToken() {
-  const response = await fetch('https://accounts.spotify.com/api/token', {
-  method: 'POST',
-  headers: {
-  'Content-Type': 'application/x-www-form-urlencoded',
-  'Authorization': 'Basic ' + btoa(client_id + ':' + client_secret)
-  },
-  body: 'grant_type=client_credentials'
-  });
-  const data = await response.json();
-  return data.access_token;
-  }
-  
-  async function searchTracks(query) {
-    const token = await getAccessToken();
-    const response = await fetch(`https://api.spotify.com/v1/search?type=track&q=${query}`, {
+  function findTrack(searchString) {
+    // TODO: move secrets somewhere else so they're not available to browser
+    const client_id = process.env.REACT_APP_SPOTIFY_CLIENT_ID;
+    const client_secret = process.env.REACT_APP_SPOTIFY_CLIENT_SECRET;
+    
+    async function getAccessToken() {
+    const response = await fetch('https://accounts.spotify.com/api/token', {
+    method: 'POST',
     headers: {
-      'Authorization': 'Bearer ' + token
+    'Content-Type': 'application/x-www-form-urlencoded',
+    'Authorization': 'Basic ' + btoa(client_id + ':' + client_secret)
+    },
+    body: 'grant_type=client_credentials'
+    });
+    const data = await response.json();
+    return data.access_token;
     }
-  });
-  const data = await response.json();
-  console.log(data.tracks.items);
+    
+    async function searchTracks(query) {
+      const token = await getAccessToken();
+      const response = await fetch(`https://api.spotify.com/v1/search?type=track&q=${query}`, {
+      headers: {
+        'Authorization': 'Bearer ' + token
+      }
+    });
+    const data = await response.json();
+    console.log(data.tracks.items);
+    }
+    
+    let trackList = searchTracks(searchString);
+    if (trackList) return trackList[0];
   }
-  
-  searchTracks(searchString);
-};
 
 // Simulated track analysis - in production, this would call Spotify API
 const analyzeTrack = (url) => {
