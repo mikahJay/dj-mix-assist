@@ -9,9 +9,9 @@ const [selectedPair, setSelectedPair] = useState(null);
 
 // select a track by searching (just take top 1 for now)
 const findTrack = (searchString) => {
-  // TODO: move secrets store (aws?)
-  const client_id = process.env.spotify_client_id;
-  const client_secret = process.env.spotify_client_secret;
+  // TODO: move secrets somewhere else so they're not available to browser
+  const client_id = process.env.REACT_APP_SPOTIFY_CLIENT_ID;
+  const client_secret = process.env.REACT_APP_SPOTIFY_CLIENT_SECRET;
   
   async function getAccessToken() {
   const response = await fetch('https://accounts.spotify.com/api/token', {
@@ -63,9 +63,8 @@ return {
 };
 
 const addTrack = () => {
-  findTrack('');
   if (!spotifyUrl) return;
-  
+  findTrack(spotifyUrl);
   setAnalyzing(true);
   setTimeout(() => {
     const newTrack = analyzeTrack(spotifyUrl);
