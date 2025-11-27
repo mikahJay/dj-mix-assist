@@ -7,6 +7,39 @@ const [spotifyUrl, setSpotifyUrl] = useState('');
 const [analyzing, setAnalyzing] = useState(false);
 const [selectedPair, setSelectedPair] = useState(null);
 
+// select a track by searching (just take top 1 for now)
+const findTrack = (searchString) => {
+  // TODO: move these to .env file first, then some secrets store (aws?) later
+  const client_id = 'bc6b8939597c4046ac84ea9606c8c258';
+  const client_secret = '4d994ea3b313437392af698a51bd4482';
+  
+  async function getAccessToken() {
+  const response = await fetch('https://accounts.spotify.com/api/token', {
+  method: 'POST',
+  headers: {
+  'Content-Type': 'application/x-www-form-urlencoded',
+  'Authorization': 'Basic ' + btoa(client_id + ':' + client_secret)
+  },
+  body: 'grant_type=client_credentials'
+  });
+  const data = await response.json();
+  return data.access_token;
+  }
+  
+  async function searchTracks(query) {
+    const token = await getAccessToken();
+    const response = await fetch(`https://api.spotify.com/v1/search?type=track&q=${query}`, {
+    headers: {
+      'Authorization': 'Bearer ' + token
+    }
+  });
+  const data = await response.json();
+  console.log(data.tracks.items);
+  }
+  
+  searchTracks('Imagine Dragons');
+};
+
 // Simulated track analysis - in production, this would call Spotify API
 const analyzeTrack = (url) => {
 // Mock data generation based on typical track characteristics
@@ -30,16 +63,17 @@ return {
 };
 
 const addTrack = () => {
-if (!spotifyUrl) return;
-
-setAnalyzing(true);
-setTimeout(() => {
-  const newTrack = analyzeTrack(spotifyUrl);
-  setTracks([...tracks, newTrack]);
-  setSpotifyUrl('');
-  setAnalyzing(false);
-}, 800);
-
+  findTrack('Imagine Dragons');
+  if (!spotifyUrl) return;
+  
+  setAnalyzing(true);
+  setTimeout(() => {
+    const newTrack = analyzeTrack(spotifyUrl);
+    setTracks([...tracks, newTrack]);
+    setSpotifyUrl('');
+    setAnalyzing(false);
+  }, 800);
+  
 };
 
 const calculateMixCompatibility = (track1, track2) => {
