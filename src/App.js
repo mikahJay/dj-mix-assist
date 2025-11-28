@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import SearchComponent from './SearchComponent';
+import TrackListComponent from './TrackListComponent';
 import './App.css'; // Optional: for styling
 
 // Parent component
@@ -10,6 +11,8 @@ function App() {
   const base_auth_url = 'https://accounts.spotify.com/api/token';
   const base_search_url = 'https://api.spotify.com/v1/search?type=track&q=';
 
+  // stores search results
+  const [results, setResults] = useState([]);
   return (
     <div className="App">
       <header className="App-header">
@@ -18,8 +21,9 @@ function App() {
       </header>
       <div>
         {/* Prop drilling searchTerm and setter */}
-        <SearchComponent base_auth_url={base_auth_url} base_search_url={base_search_url}
+        <SearchComponent setResults={setResults} base_auth_url={base_auth_url} base_search_url={base_search_url}
           client_id={spotify_client_id} client_secret={spotify_client_secret}/>
+        <TrackListComponent results={results} />
       </div>
     </div>
   );

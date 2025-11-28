@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 
-function SearchComponent({ base_auth_url, base_search_url, client_id, client_secret }) {
+function SearchComponent({ setResults, base_auth_url, base_search_url, client_id, client_secret }) {
   const [query, setQuery] = useState("");       // Stores the search text
-  const [results, setResults] = useState([]);   // Stores API results
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -48,7 +47,6 @@ function SearchComponent({ base_auth_url, base_search_url, client_id, client_sec
         }
       }); 
       const data = await response.json();
-      console.log(data.tracks.items[0].name);
       setResults(data.tracks.items || []);
       if (!response.ok) {
         throw new Error(`API error: ${response.status}`);
@@ -84,14 +82,9 @@ function SearchComponent({ base_auth_url, base_search_url, client_id, client_sec
       {/* Error Message */}
       {error && <p style={{ color: "red" }}>{error}</p>}
 
-      {/* Results */}
-      <ul>
-        {results.map((item, index) => (
-          <li key={index}>{JSON.stringify(item)}</li>
-        ))}
-      </ul>
     </div>
   );
 }
 
 export default SearchComponent;
+
