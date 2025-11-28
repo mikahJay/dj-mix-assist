@@ -14,6 +14,8 @@ function DJMixAssistant({ resultTracks }) {
     const genres = ['House', 'Techno', 'Tech House', 'Deep House', 'Melodic Techno'];
     const keys = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
     const modes = ['Major', 'Minor'];
+
+    //use the track id to get audio analysis
     
     return {
       id: Date.now() + Math.random(),
