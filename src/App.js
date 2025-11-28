@@ -13,6 +13,8 @@ function App() {
 
   // stores search results
   const [results, setResults] = useState([]);
+  // stores selected tracks
+  const [selectedTracks, setSelectedTracks] = useState([]);
   return (
     <div className="App">
       <header className="App-header">
@@ -23,7 +25,7 @@ function App() {
         {/* Prop drilling searchTerm and setter */}
         <SearchComponent setResults={setResults} base_auth_url={base_auth_url} base_search_url={base_search_url}
           client_id={spotify_client_id} client_secret={spotify_client_secret}/>
-        <TrackListComponent results={results} />
+        <TrackListComponent results={results} setSelectedTracks={setSelectedTracks} />
       </div>
     </div>
   );
