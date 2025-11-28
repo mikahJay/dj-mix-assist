@@ -1,46 +1,12 @@
 import React, { useState } from 'react';
 import { Music, Play, Zap, Sliders, Info } from 'lucide-react';
 
-function DJMixAssistant() {
+function DJMixAssistant({ resultTracks }) {
+  console.log('resultTracks: ' + resultTracks);
   const [tracks, setTracks] = useState([]);
   const [trackName, setSpotifyUrl] = useState('');
   const [analyzing, setAnalyzing] = useState(false);
   const [selectedPair, setSelectedPair] = useState(null);
-  
-  // select a track by searching (just take top 1 for now)
-  function findTrack(searchString) {
-    // TODO: move secrets somewhere else so they're not available to browser
-    const client_id = process.env.REACT_APP_SPOTIFY_CLIENT_ID;
-    const client_secret = process.env.REACT_APP_SPOTIFY_CLIENT_SECRET;
-    
-    async function getAccessToken() {
-    const response = await fetch('https://accounts.spotify.com/api/token', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-      'Authorization': 'Basic ' + btoa(client_id + ':' + client_secret)
-    },
-    body: 'grant_type=client_credentials'
-    });
-    const data = await response.json();
-    return data.access_token;
-    }
-    
-    async function searchTracks(query) {
-      const token = await getAccessToken();
-      const response = await fetch(`https://api.spotify.com/v1/search?type=track&q=${query}`, {
-        headers: {
-          'Authorization': 'Bearer ' + token
-        }
-      });
-      const data = await response.json();
-      return data.tracks.items;
-    }
-    
-    let trackList = searchTracks(searchString);
-    console.log(trackList);
-    if (trackList) return trackList[0];
-  }
   
   // Simulated track analysis - in production, this would call Spotify API
   const analyzeTrack = (url) => {
@@ -61,23 +27,20 @@ function DJMixAssistant() {
       duration: Math.floor(Math.random() * 180) + 180, // 3-6 minutes
       genre: genres[Math.floor(Math.random() * genres.length)]
     };
-    
   };
-  
+ 
   const addTrack = () => {
     if (!trackName) return;
     setAnalyzing(true);
     setTimeout(() => {
-      console.log(trackName);
-      let track = findTrack(trackName);
-      const newTrack = analyzeTrack(track);
+      const newTrack = analyzeTrack('');
       setTracks([...tracks, newTrack]);
       setSpotifyUrl('');
       setAnalyzing(false);
     }, 800);
     
   };
-  
+
   const calculateMixCompatibility = (track1, track2) => {
     const bpmDiff = Math.abs(track1.bpm - track2.bpm);
     const bpmScore = Math.max(0, 100 - (bpmDiff * 5));

@@ -40,32 +40,29 @@ function SearchComponent({ base_auth_url, base_search_url, client_id, client_sec
     }
 
     // search
-    async function search() {
-      try {
-        const token = await getAccessToken();
-        const response = await fetch(`${base_search_url}${query}`, {
-          headers: {
-            'Authorization': 'Bearer ' + token
-          }
-        }); 
-        const data = await response.json();
-        setResults(data.items || []);
-        if (!response.ok) {
-          throw new Error(`API error: ${response.status}`);
+    try {
+      const token = await getAccessToken();
+      const response = await fetch(`${base_search_url}${query}`, {
+        headers: {
+          'Authorization': 'Bearer ' + token
         }
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
+      }); 
+      const data = await response.json();
+      console.log(data.tracks.items[0].name);
+      setResults(data.tracks.items || []);
+      if (!response.ok) {
+        throw new Error(`API error: ${response.status}`);
       }
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
     }
-
-    await search();
   };
 
   return (
     <div style={{ padding: "20px", fontFamily: "Arial" }}>
-      <h2>Search API Example</h2>
+      <h2>Search Tracks from Spotify</h2>
 
       {/* Search Input */}
       <input
