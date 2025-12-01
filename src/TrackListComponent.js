@@ -2,14 +2,12 @@ import React, { useState } from "react";
 
 import TrackComponent from './TrackComponent';
 
-function TrackListComponent({ results }) {
-
-  const [selectedTracks, setSelectedTracks]= useState([]);
+function TrackListComponent({ results, setSelectedTracks }) {
 
   return (
     <ul>
-      {results.map((item, index) => ( 
-        <li key={index}><TrackComponent track={item} setSelectedTracks={setSelectedTracks} /></li>
+      {results.map((item, index) => (
+        <TrackComponent track={item} setSelectedTracks={setSelectedTracks} />
       ))} 
     </ul>
   );
