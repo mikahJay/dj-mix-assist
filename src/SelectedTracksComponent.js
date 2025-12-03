@@ -4,7 +4,7 @@ function SelectedTracksComponent({ selectedTracks }) {
   return (
     <ul>
       {selectedTracks.map((item, index) => (
-        <li>item {index} is {item}</li>
+        <li key={item}>item {index} is {item}</li>
       ))} 
     </ul>
   );

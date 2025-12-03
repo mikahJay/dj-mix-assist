@@ -16,6 +16,8 @@ function TrackComponent({ track, selectedTracks, setSelectedTracks }) {
   // remove track by value
   const handleRemoveTrack = (event) => {
     setSelected(false);
+    setSelectedTracks(prevItems => prevItems.filter(item => item.id !== event.target.value));
+
     console.log('list of selected tracks: ' + selected);
     console.log(`removing track ${event.target.value}`);
   }
