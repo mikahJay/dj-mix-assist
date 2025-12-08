@@ -24,7 +24,7 @@ function TrackComponent({ track, selectedTracks, setSelectedTracks }) {
 
   return (
     <div id={track.id}>
-      <li key={track.id}>
+      <li key={track.href}>
         <button
           value={track.href}
           onClick={selected ? handleRemoveTrack : handleSelectTrack}
@@ -37,8 +37,8 @@ function TrackComponent({ track, selectedTracks, setSelectedTracks }) {
         >   
         {selected ? <>-</> : <>+</>}
         </button>
+        {track.name} - ({track.artists[0].name})
       </li>
-      {track.name} - ({track.artists[0].name})
     </div>
   );
 
