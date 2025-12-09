@@ -26,6 +26,7 @@ function TrackComponent({ track, selectedTracks, setSelectedTracks }) {
     <div id={track.id}>
       <li key={track.href}>
         <button
+          data-testid={track.href}
           value={track.href}
           onClick={selected ? handleRemoveTrack : handleSelectTrack}
           style={{
