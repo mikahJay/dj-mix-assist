@@ -17,7 +17,7 @@ We've abstracted commands into a Makefile, so that parameters can be introduced 
 
 For now, in the project directory, you can run:
 
-### `make run` (or `npm run`)
+### `make quick` or `make run` (or `npm run`)
 
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
