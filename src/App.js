@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import SearchComponent from './SearchComponent';
-import TrackListComponent from './TrackListComponent';
-import SelectedTracksComponent from './SelectedTracksComponent';
+import logo from './logo.svg';
 import './App.css';
+import styles from './styles';
+import SelectableListComponent from './SelectableListComponent';
+import SelectedItemsListComponent from './SelectedItemsListComponent';
+import SearchComponent from './SearchComponent';
 
-// Parent component
 function App() {
+
   // TODO: move secrets somewhere else so they're not available to browser
   const spotify_client_id = process.env.REACT_APP_SPOTIFY_CLIENT_ID;
   const spotify_client_secret = process.env.REACT_APP_SPOTIFY_CLIENT_SECRET;
@@ -14,20 +16,32 @@ function App() {
 
   // stores search results
   const [results, setResults] = useState([]);
-  // stores selected tracks
-  const [selectedTracks, setSelectedTracks] = useState([]);
+  const [selectedItems, setSelectedItems] = useState([]);
 
+  // Toggle selection
+  const handleToggle = (item) => {
+    setSelectedItems((prev) =>
+      prev.includes(item)
+        ? prev.filter((i) => i !== item) // Deselect
+        : [...prev, item] // Select
+    );  
+  };  
+ 
   return (
     <div className="App">
       <header className="App-header">
-        <h1>Mix Assist</h1>
-        <p>Find a few Spotify tracks and automatically create mix recommendations.</p>
       </header>
       <div>
         <SearchComponent setResults={setResults} base_auth_url={base_auth_url} base_search_url={base_search_url}
           client_id={spotify_client_id} client_secret={spotify_client_secret}/>
-        <TrackListComponent results={results} setSelectedTracks={setSelectedTracks} />
-        <SelectedTracksComponent selectedTracks={selectedTracks} />
+        <div style={styles.app}>
+          <SelectableListComponent
+            items={results}
+            selectedItems={selectedItems}
+            onToggle={handleToggle}
+          />  
+          <SelectedItemsListComponent selectedItems={selectedItems} />
+        </div>
       </div>
     </div>
   );
