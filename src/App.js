@@ -5,6 +5,7 @@ import styles from './styles';
 import SelectableListComponent from './SelectableListComponent';
 import SelectedItemsListComponent from './SelectedItemsListComponent';
 import SearchComponent from './SearchComponent';
+import ApiWrapper from './ApiWrapper';
 
 function App() {
 
@@ -25,14 +26,16 @@ function App() {
         ? prev.filter((i) => i !== item) // Deselect
         : [...prev, item] // Select
     );  
-  };  
+  };
+
+  const apiWrapper = new ApiWrapper();
  
   return (
     <div className="App">
       <header className="App-header">
       </header>
       <div>
-        <SearchComponent setResults={setResults} base_auth_url={base_auth_url} base_search_url={base_search_url}
+        <SearchComponent apiWrapper={apiWrapper} setResults={setResults} base_auth_url={base_auth_url} base_search_url={base_search_url}
           client_id={spotify_client_id} client_secret={spotify_client_secret}/>
         <div style={styles.app}>
           <SelectableListComponent

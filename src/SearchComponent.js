@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import httpRequestWrapper from './ApiWrapper';
+import ApiWrapper from './ApiWrapper';
 
-function SearchComponent({ setResults, base_auth_url, base_search_url, client_id, client_secret }) {
+function SearchComponent({ apiWrapper, setResults, base_auth_url, base_search_url, client_id, client_secret }) {
   const [query, setQuery] = useState("");       // Stores the search text
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -20,9 +21,16 @@ function SearchComponent({ setResults, base_auth_url, base_search_url, client_id
     setResults([]);
 
     try {
-      const data = await httpRequestWrapper(`${base_search_url}${query}`, base_auth_url, client_id, client_secret, setLoading, setError, setResults);
-      setResults(data.tracks.items || []);
+      const data = await apiWrapper.httpRequestWrapper(`${base_search_url}${query}`, base_auth_url, client_id, client_secret, setLoading, setError, setResults);
+      console.log(data);
+      if (!data || !data.tracks || data.tracks.length == 0) {
+        setError('No tracks found.');
+      }
+      else {
+        setResults(data.tracks.items || []);
+      }
     } catch (err) {
+      console.log('caught error ' + err.message);
       setError(err.message);
     } finally {
       setLoading(false);
@@ -35,7 +43,7 @@ function SearchComponent({ setResults, base_auth_url, base_search_url, client_id
 
       {/* Search Input */}
       <input
-        data-testid='search-text'
+        data-testid="search-text"
         type="text"
         value={query}
         placeholder="Enter Track Name..."
@@ -44,7 +52,7 @@ function SearchComponent({ setResults, base_auth_url, base_search_url, client_id
       />
 
       {/* Search Button */}
-      <button data-testid='search-button' onClick={handleSearch} style={{ padding: "8px 16px" }}>
+      <button data-testid="search-button" onClick={handleSearch} style={{ padding: "8px 16px" }}>
         Search
       </button>
 
@@ -52,7 +60,7 @@ function SearchComponent({ setResults, base_auth_url, base_search_url, client_id
       {loading && <p>Loading...</p>}
 
       {/* Error Message */}
-      {error && <p data-testid='error-text' style={{ color: "red" }}>{error}</p>}
+      {error && <p data-testid="error-text" style={{ color: "red" }}>{error}</p>}
 
     </div>
   );

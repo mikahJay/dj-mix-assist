@@ -1,8 +1,7 @@
-import { useRef } from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, act, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import SearchComponent from '../SearchComponent';
-import { ApiWrapper } from '../ApiWrapper';
+import ApiWrapper from '../ApiWrapper';
 
 it('renders empty search box and button', () => {
   render(<SearchComponent />);
@@ -19,13 +18,34 @@ it('errors when no text is entered and search is clicked', () => {
   expect(screen.getByText('Please enter a search term.')).toBeInTheDocument();
 });
 
-it('invokes a search when text is entered and search is clicked', () => {
+it('shows no tracks found when api returns nothing', async () => {
+  await act(async() => {
+    const apiWrapper = new ApiWrapper();
+    apiWrapper.httpRequestWrapper = jest.fn().mockImplementation(() => { return {}; } );
+    render(<SearchComponent apiWrapper={apiWrapper} setResults={jest.fn()} />);
+  });
 
-  render(<SearchComponent setResults={jest.fn()} />);
   const button = screen.getByTestId('search-button');
   const search = screen.getByTestId('search-text');
-  httpRequestWrapper = jest.fn().mockImplementation(() => { console.log('in mock implementation'); });
-  userEvent.type(search, 'illuminate');
-  fireEvent.click(button);
-  expect(screen.queryByTestId('error-text')).toBeNull();
+  await act(async() => {
+    userEvent.type(search, '....');
+    fireEvent.click(button);
+  });
+  expect(screen.queryByTestId('error-text').textContent).toBe('No tracks found.');
+});
+
+it('shows no tracks found when tracks are empty', async () => {
+  await act(async() => {
+    const apiWrapper = new ApiWrapper();
+    apiWrapper.httpRequestWrapper = jest.fn().mockImplementation(() => { return {"tracks": [] }; } );
+    render(<SearchComponent apiWrapper={apiWrapper} setResults={jest.fn()} />);
+  });
+
+  const button = screen.getByTestId('search-button');
+  const search = screen.getByTestId('search-text');
+  await act(async() => {
+    userEvent.type(search, '....');
+    fireEvent.click(button);
+  });
+  expect(screen.queryByTestId('error-text').textContent).toBe('No tracks found.');
 });
