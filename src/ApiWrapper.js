@@ -20,7 +20,7 @@ export default class ApiWrapper {
     // TODO: refactor to case where no auth needed
     if (auth_url) {
       // search
-      const token = await getAccessToken(auth_url, client_id, client_secret);
+      const token = await this.getAccessToken(auth_url, client_id, client_secret);
       const response = await fetch(url, {
         headers: {
           'Authorization': 'Bearer ' + token
