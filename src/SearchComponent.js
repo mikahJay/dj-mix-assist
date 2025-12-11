@@ -35,6 +35,7 @@ function SearchComponent({ setResults, base_auth_url, base_search_url, client_id
 
       {/* Search Input */}
       <input
+        data-testid='search-text'
         type="text"
         value={query}
         placeholder="Enter Track Name..."
@@ -43,7 +44,7 @@ function SearchComponent({ setResults, base_auth_url, base_search_url, client_id
       />
 
       {/* Search Button */}
-      <button onClick={handleSearch} style={{ padding: "8px 16px" }}>
+      <button data-testid='search-button' onClick={handleSearch} style={{ padding: "8px 16px" }}>
         Search
       </button>
 
@@ -51,7 +52,7 @@ function SearchComponent({ setResults, base_auth_url, base_search_url, client_id
       {loading && <p>Loading...</p>}
 
       {/* Error Message */}
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      {error && <p data-testid='error-text' style={{ color: "red" }}>{error}</p>}
 
     </div>
   );
