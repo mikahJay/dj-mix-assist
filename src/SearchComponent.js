@@ -22,7 +22,6 @@ function SearchComponent({ apiWrapper, setResults, base_auth_url, base_search_ur
 
     try {
       const data = await apiWrapper.httpRequestWrapper(`${base_search_url}${query}`, base_auth_url, client_id, client_secret, setLoading, setError, setResults);
-      console.log(data);
       if (!data || !data.tracks || data.tracks.length == 0) {
         setError('No tracks found.');
       }
@@ -30,7 +29,6 @@ function SearchComponent({ apiWrapper, setResults, base_auth_url, base_search_ur
         setResults(data.tracks.items || []);
       }
     } catch (err) {
-      console.log('caught error ' + err.message);
       setError(err.message);
     } finally {
       setLoading(false);

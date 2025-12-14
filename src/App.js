@@ -17,15 +17,15 @@ function App() {
 
   // stores search results
   const [results, setResults] = useState([]);
-  const [selectedItems, setSelectedItems] = useState([]);
+  const selectedItems = results.filter((item) => item.selected);
 
-  // Toggle selection
-  const handleToggle = (item) => {
-    setSelectedItems((prev) =>
-      prev.includes(item)
-        ? prev.filter((i) => i !== item) // Deselect
-        : [...prev, item] // Select
-    );  
+  // Toggle selected state for an item
+  const toggleItem = (id) => {
+    setResults((prev) =>
+      prev.map((item) =>
+        item.id === id ? { ...item, selected: !item.selected } : item
+      )
+    );
   };
 
   const apiWrapper = new ApiWrapper();
@@ -38,12 +38,8 @@ function App() {
         <SearchComponent apiWrapper={apiWrapper} setResults={setResults} base_auth_url={base_auth_url} base_search_url={base_search_url}
           client_id={spotify_client_id} client_secret={spotify_client_secret}/>
         <div style={styles.app}>
-          <SelectableListComponent
-            items={results}
-            selectedItems={selectedItems}
-            onToggle={handleToggle}
-          />  
-          <SelectedItemsListComponent selectedItems={selectedItems} />
+          <SelectableListComponent items={results} onToggle={toggleItem} />
+          <SelectedItemsListComponent items={selectedItems} />
         </div>
       </div>
     </div>
