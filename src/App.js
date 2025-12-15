@@ -7,7 +7,7 @@ import SelectedItemsListComponent from './SelectedItemsListComponent';
 import SearchComponent from './SearchComponent';
 import ApiWrapper from './ApiWrapper';
 
-function App() {
+function App({ initialItems }) {
 
   // TODO: move secrets somewhere else so they're not available to browser
   const spotify_client_id = process.env.REACT_APP_SPOTIFY_CLIENT_ID;
@@ -15,11 +15,10 @@ function App() {
   const base_auth_url = 'https://accounts.spotify.com/api/token';
   const base_search_url = 'https://api.spotify.com/v1/search?type=track&q=';
 
-  // stores search results
-  const [results, setResults] = useState([]);
-  const selectedItems = results.filter((item) => item.selected);
+  // store search results - default to injected for testability
+  const [results, setResults] = useState(initialItems || []);
 
-  // Toggle selected state for an item
+  // toggle selected state for an item
   const toggleItem = (id) => {
     setResults((prev) =>
       prev.map((item) =>
@@ -28,6 +27,7 @@ function App() {
     );
   };
 
+  const selectedItems = results.filter((item) => item.selected);
   const apiWrapper = new ApiWrapper();
  
   return (

@@ -1,13 +1,9 @@
 import styles from './styles';
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import React from 'react';
 
 // Component: SelectableList
 function SelectableListComponent({ items, onToggle }) {
-  console.log('items = ' + items);
-  const [list, setList] = useState(
-    items.map((item) => ({ ...item, selected: false }))
-  );
   
   return (
     <div style={styles.listContainer}>

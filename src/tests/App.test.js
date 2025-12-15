@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, act, screen, fireEvent } from '@testing-library/react';
 import App from '../App';
 
 const double_track = [ 
@@ -7,26 +7,21 @@ const double_track = [
 ];
 
 
-it('renders the SearchComponent', () => {
+it('renders the SearchComponent', async () => {
   render(<App />);
   expect(screen.getByText('Search Tracks from Spotify')).toBeInTheDocument();
 });
 
 it('toggles the color of a selected item to green', async () => {
 
+  render(<App initialItems={double_track} />);
+  
   // loop through tracks, select each one, and validate (after awaiting) that
   // the item's background color has changed
   double_track.map((track) => {  
     let list_item = screen.getByTestId('selectable-item-' + track.id);
-    console.log('list_item = ' + list_item);
-//     await act((async) => {
-//       expect(list_item).toHaveStyle('backgroundColor', '#d1e7dd');
-//     });
+    expect(list_item).toHaveStyle(`background-color: #f8f9fa`);
+    fireEvent.click(list_item);
+    expect(list_item).toHaveStyle(`background-color: #d1e7dd`);
   });
 });
-
-// it('renders an empty SelectableListComponent on initial load', () => {
-//   render(<App />);
-//   expect(screen.queryByText('Track List:')).not.toBeInTheDocument();
-//   expect(screen.queryByText('No results found.')).toBeInTheDocument();
-// });
