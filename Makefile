@@ -5,7 +5,7 @@ run:
 
 test:
 	rm -rf coverage
-	npm test -- --coverage --no-cache
+	npm test -- --coverage --watchAll
 
 build:
 	npm run build
