@@ -2,6 +2,7 @@ export default class ApiWrapper {
 
   // get auth token
   async getAccessToken(auth_url, client_id, client_secret) {
+    if (!auth_url) { return null; }
     const response = await fetch(auth_url, {
       method: 'POST',
       headers: {
@@ -18,17 +19,16 @@ export default class ApiWrapper {
   // if auth, id and secret supplied, will attempt to establish basic auth
   async httpRequestWrapper(url, auth_url, client_id, client_secret) {
     // TODO: refactor to case where no auth needed
-    if (auth_url) {
-      // search
-      const token = await this.getAccessToken(auth_url, client_id, client_secret);
-      const response = await fetch(url, {
-        headers: {
-          'Authorization': 'Bearer ' + token
-        }   
-      });
-      const data = await response.json();
-      return data;
-    }
+    if (!auth_url) { return null; }
+    const token = await this.getAccessToken(auth_url, client_id, client_secret);
+    const response = await fetch(url, {
+      headers: {
+        'Authorization': 'Bearer ' + token
+      }   
+    });
+    const data = await response.json();
+    return data;
+    
   }
 
 }
