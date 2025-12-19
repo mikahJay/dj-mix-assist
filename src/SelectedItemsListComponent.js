@@ -1,9 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-export default function SelectedItemListComponent({ items }) {
-  if (items.length === 0) {
-    return <p data-testid="no-selected">No items selected</p>;
+export default function SelectedItemsListComponent({ items }) {
+  if (!items || items.length === 0) {
+    return <p data-testid="no-selected-text">No items selected</p>;
   }
 
   return (
@@ -17,7 +17,7 @@ export default function SelectedItemListComponent({ items }) {
   );  
 }
 
-SelectedItemListComponent.propTypes = { 
+SelectedItemsListComponent.propTypes = { 
   items: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number.isRequired,

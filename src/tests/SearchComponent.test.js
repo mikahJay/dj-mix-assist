@@ -34,7 +34,7 @@ it('shows no tracks found when api returns nothing', async () => {
   expect(screen.queryByTestId('error-text').textContent).toBe('No tracks found.');
 });
 
-it('shows no tracks found when tracks are empty', async () => {
+it('shows no tracks when tracks are empty', async () => {
   await act(async() => {
     const apiWrapper = new ApiWrapper();
     apiWrapper.httpRequestWrapper = jest.fn().mockImplementation(() => { return {"tracks": [] }; } );

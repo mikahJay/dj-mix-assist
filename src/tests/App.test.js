@@ -12,7 +12,7 @@ it('renders the SearchComponent', async () => {
   expect(screen.getByText('Search Tracks from Spotify')).toBeInTheDocument();
 });
 
-it('toggles the color of a selected item to green', async () => {
+it('toggles the color of the selected item to green', async () => {
 
   render(<App initialItems={double_track} />);
   
